@@ -59,7 +59,7 @@ class Server:
         end_index = index[1]
         try:
             return self.dataset()[start_index:end_index]
-        except IndexError
+        except IndexError:
             return []
 
 
