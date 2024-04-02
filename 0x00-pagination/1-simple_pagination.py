@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Module"""
+import csv
+import math
+from typing import List
+
 
 def index_range(page: int, page_size: int) -> tuple:
     """
@@ -10,15 +14,11 @@ def index_range(page: int, page_size: int) -> tuple:
         page_size (int): The number of items per page.
 
     Returns:
-        tuple: A tuple containing the start index (inclusive) and end index (exclusive).
+        tuple: 
     """
     start_index = (page - 1) * page_size
     end_index = start_index + page_size
     return start_index, end_index
-
-import csv
-import math
-from typing import List
 
 
 class Server:
@@ -42,14 +42,13 @@ class Server:
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
          """
-        Retrieves the appropriate page of a dataset based on pagination parameters.
-
+        Retrieves the appropriate page of a dataset
+        based on pagination parameters.
         Args:
-        page (int, optional): The current page number (1-based index). Defaults to 1.
-        page_size (int, optional): The number of items per page. Defaults to 10.
-
+        page (int, optional): 
+        page_size (int, optional): 
         Returns:
-        list: The list of rows corresponding to the requested page.
+        list: 
         """
         assert isinstance(page, int) and page > 0
         assert isinstance(page_size, int) and page_size > 0
