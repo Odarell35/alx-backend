@@ -52,10 +52,7 @@ class Server:
         """
         assert isinstance(page, int) and page > 0
         assert isinstance(page_size, int) and page_size > 0
-        index = index_range(page, page_size)
-
-        start_index = index[[0]
-        end_index = index[1]
+        start_index, end_index = index_range(page, page_size)
 
         dataset = self.dataset()
 
