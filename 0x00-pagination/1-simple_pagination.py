@@ -56,9 +56,11 @@ class Server:
 
         start_index = index[[0]
         end_index = index[1]
-        try:
-            return self.dataset()[start_index:end_index]
-        except IndexError:
+
+        dataset = self.dataset()
+
+        if start_index >= len(dataset):
             return []
-
-
+        else:
+            return dataset[start_index:end_index]
+        
