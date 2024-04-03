@@ -1,37 +1,48 @@
-#!/usr/bin/env python3
-"""Module"""
-
+#!/usr/bin/python3
+""" Create LFUCache class that inherits from BaseCaching """
 BaseCaching = __import__('base_caching').BaseCaching
 
 
 class LFUCache(BaseCaching):
-    """ LFU caching system """
+    """ Define LFUCache """
 
     def __init__(self):
-        """ Initialize the LFU cache """
+        """ Initialize LFUCache """
+        self.block = []
+        self.new_dict = {}
         super().__init__()
-        self.frequency = {}
 
     def put(self, key, item):
-        """ Add item to the cache """
-        if key is None or item is None:
-            return
+        """ Assign the item to the dictionary """
+        if key and item:
+            if (len(self.block) >= self.MAX_ITEMS and
+                    not self.cache_data.get(key)):
+                remove = self.block.pop(0)
+                self.new_dict.pop(remove)
+                self.cache_data.pop(remove)
+                print('DISCARD: {}'.format(remove))
 
-        if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
-            lowfrequency = min(self.frequency.values())
-            min_frequency = [k for k, v in self.frequency.items() if v == lowfrequency]
-            least_recently = min(min_frequency, key=lambda k: self.cache_data[k])
-            print("DISCARD:", least_recently)
-            del self.cache_data[least_recently]
-            del self.frequency[least_recently]
+            if self.cache_data.get(key):
+                self.block.remove(key)
+                self.new_dict[key] += 1
+            else:
+                self.new_dict[key] = 0
 
-        self.cache_data[key] = item
-        self.frequency[key] = 0
+            initial_index = 0
+            while (initial_index < len(self.block) and
+                   not self.new_dict[self.block[initial_index]]):
+                initial_index += 1
+            self.block.insert(initial_index, key)
+            self.cache_data[key] = item
 
     def get(self, key):
-        """ Return the value linked to key """
-        if key in self.cache_data:
-            self.frequency[key] += 1
-            return self.cache_data[key]
-        else:
-            return None
+        """ Return the value associated with the given key """
+        if self.cache_data.get(key):
+            self.new_dict[key] += 1
+            if self.block.index(key) + 1 != len(self.block):
+                while (self.block.index(key) + 1 < len(self.block) and
+                       self.new_dict[key] >=
+                       self.new_dict[self.block[self.block.index(key) + 1]]):
+                    self.block.insert(self.block.index(key) + 1,
+                                      self.block.pop(self.block.index(key)))
+        return self.cache_data.get(key)
