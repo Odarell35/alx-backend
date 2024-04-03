@@ -18,7 +18,8 @@ class LIFOCache(BaseCaching):
 
         if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
             last_key = self.order.pop(-1)
-            self.cache_data.pop(last_key)
+            discarded = self.cache_data.pop(last_key)
+            print(f'DISCARD: {discarded}')
 
         self.cache_data[key] = item
         self.order.append(key)
