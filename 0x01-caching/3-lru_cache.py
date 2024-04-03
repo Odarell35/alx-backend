@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Module"""
 
-BaseCaching = __import__('base_caching').BaseCaching
+from base_caching import BaseCaching
+from collections import deque
 
 
 class LRUCache(BaseCaching):
@@ -10,7 +11,7 @@ class LRUCache(BaseCaching):
     def __init__(self):
         """ Initialize the LRU cache """
         super().__init__()
-        self.lru_queue = []
+        self.lru_queue = deque()
 
     def put(self, key, item):
         """ Add item to the cache """
@@ -18,9 +19,9 @@ class LRUCache(BaseCaching):
             return
 
         if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
-            least_recently_used_key = self.lru_queue.pop(0)
+            least_recently_used_key = self.lru_queue.popleft()
             print("DISCARD:", least_recently_used_key)
-            del self.cache_data[least_recently_used_key]
+            self.cache_data.pop(least_recently_used_key)
 
         self.cache_data[key] = item
         self.lru_queue.append(key)
@@ -31,5 +32,4 @@ class LRUCache(BaseCaching):
             self.lru_queue.remove(key)
             self.lru_queue.append(key)
             return self.cache_data[key]
-        else:
-            return None
+        return None
