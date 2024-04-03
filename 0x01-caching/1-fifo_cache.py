@@ -1,29 +1,28 @@
-#!/usr/bin/env python3
-"""Module"""
+#!/usr/bin/python3
+""" Contains FIFOCache class """
 
 from base_caching import BaseCaching
 
 
 class FIFOCache(BaseCaching):
-    """class"""
+    """ FIFOCache implementation """
     def __init__(self):
-        """initialization"""
+        """ Instantiation """
         super().__init__()
 
     def put(self, key, item):
-        """method"""
+        """ assigns key & item to cache_data """
         if key or item is not None:
-            if len(self.cache_data) > BaseCaching.MAX_ITEMS:
-                first_key = next(iter(self.cache_data))
-                print("DISCARD:", first_key)
-                del self.cache_data[first_key]
-
             self.cache_data[key] = item
+            if len(self.cache_data) > BaseCaching.MAX_ITEMS:
+                first_item = next(iter(self.cache_data))
+                print(f'DISCARD: {first_item}')
+                self.cache_data.pop(first_item)
+                self.cache_data[key] = item
 
     def get(self, key):
-        """Must return the value in 
-        self.cache_data linked to key."""
-        if key:
-            return self.cache_data.get(key)
-        else:
+        """ returns the/a value in cache_data[key] """
+        if not key:
             return None
+        else:
+            return self.cache_data.get(key)
