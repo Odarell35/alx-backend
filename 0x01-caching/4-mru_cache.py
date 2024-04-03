@@ -1,34 +1,31 @@
-#!/usr/bin/env python3
-"""Module"""
-
+#!/usr/bin/python3
+"""Create MRUCache class that inherits from BaseCaching"""
 BaseCaching = __import__('base_caching').BaseCaching
 
+
 class MRUCache(BaseCaching):
-    """ MRU caching system """
+    """ Define MRUCache """
 
     def __init__(self):
-        """ Initialize the MRU cache """
+        """ Initialize MRUCache """
+        self.lru_list = []
         super().__init__()
-        self.mru_queue = []
 
     def put(self, key, item):
-        """ Add item to the cache """
-        if key is None or item is None:
-            return
-
-        if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
-            most_recently_used_key = self.mru_queue.pop()
-            print("DISCARD:", most_recently_used_key)
-            del self.cache_data[most_recently_used_key]
-
-        self.cache_data[key] = item
-        self.mru_queue.append(key)
+        """ Assign the item to the dictionary """
+        if key and item:
+            if self.cache_data.get(key):
+                self.lru_list.remove(key)
+            while len(self.lru_list) >= self.MAX_ITEMS:
+                remove = self.lru_list.pop()
+                self.cache_data.pop(remove)
+                print('DISCARD: {}'.format(remove))
+            self.lru_list.append(key)
+            self.cache_data[key] = item
 
     def get(self, key):
-        """ Return the value linked to key """
-        if key in self.cache_data:
-            self.mru_queue.remove(key)
-            self.mru_queue.append(key)
-            return self.cache_data[key]
-        else:
-            return None
+        """ Return the value associated with the given key """
+        if self.cache_data.get(key):
+            self.lru_list.remove(key)
+            self.lru_list.append(key)
+        return self.cache_data.get(key)
