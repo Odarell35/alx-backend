@@ -1,25 +1,23 @@
 #!/usr/bin/env python3
-"""Module implementation of cache system"""
+""" Contains basic cache class """
 
 from base_caching import BaseCaching
 
 
 class BasicCache(BaseCaching):
-    """A class that inherits from BaseCaching
-    and is a caching system:"""
-     def __init__(self):
+    """ BasicCach class implementation """
+
+    def __init__(self):
         """ Instantiation """
         self.cache_data = {}
 
     def put(self, key, item):
-        """Must assign to the dictionary"""
+        """ Add an item in the cache """
         if key and item:
             self.cache_data[key] = item
 
     def get(self, key):
-        """"Must return the value in
-        self.cache_data linked to key."""
-        if key:
-            return self.cache_data.get(key)
-        else:
+        """ Get an item by key """
+        if not key:
             return None
+        return self.cache_data.get(key)
