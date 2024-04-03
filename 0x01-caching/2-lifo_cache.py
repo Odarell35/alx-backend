@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Module"""
+"""Module implementation"""
 from base_caching import BaseCaching
 
 
@@ -17,15 +17,14 @@ class LIFOCache(BaseCaching):
             return
 
         if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
-            last_key = self.order.pop()
-            print("DISCARD:", last_key)
-            del self.cache_data[last_key]
+            last_key = self.order.pop(-1)
+            self.cache_data.pop(last_key)
 
         self.cache_data[key] = item
         self.order.append(key)
 
     def get(self, key):
-        """ Must return the value in self.cache_data linked to key """
+        """ Retrieve item from cache """
         if key in self.cache_data:
             self.order.remove(key)
             self.order.append(key)
