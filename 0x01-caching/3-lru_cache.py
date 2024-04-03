@@ -1,35 +1,31 @@
-#!/usr/bin/env python3
-"""Module"""
-
-from base_caching import BaseCaching
-from collections import deque
+#!/usr/bin/python3
+"""Create LRUCache class that inherits from BaseCaching"""
+BaseCaching = __import__('base_caching').BaseCaching
 
 
 class LRUCache(BaseCaching):
-    """ LRU caching system """
+    """ Define LRUCache """
 
     def __init__(self):
-        """ Initialize the LRU cache """
+        """ Initialize LRUCache """
+        self.queue = []
         super().__init__()
-        self.lru_queue = deque()
 
     def put(self, key, item):
-        """ Add item to the cache """
-        if key is None or item is None:
-            return
-
-        if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
-            least_recently_used_key = self.lru_queue.popleft()
-            print("DISCARD:", least_recently_used_key)
-            self.cache_data.pop(least_recently_used_key)
-
-        self.cache_data[key] = item
-        self.lru_queue.append(key)
+        """ Assign the item to the dictionary """
+        if key and item:
+            if self.cache_data.get(key):
+                self.queue.remove(key)
+            self.queue.append(key)
+            self.cache_data[key] = item
+            if len(self.queue) > self.MAX_ITEMS:
+                remove = self.queue.pop(0)
+                self.cache_data.pop(remove)
+                print('DISCARD: {}'.format(remove))
 
     def get(self, key):
-        """ Return the value linked to key """
-        if key in self.cache_data:
-            self.lru_queue.remove(key)
-            self.lru_queue.append(key)
-            return self.cache_data[key]
-        return None
+        """ Return the value associated with the given key """
+        if self.cache_data.get(key):
+            self.queue.remove(key)
+            self.queue.append(key)
+        return self.cache_data.get(key)
