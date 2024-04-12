@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 """ 0-app module """
 from flask import Flask
-from routes.routes_0 import app_routes
 
 
 app = Flask(__name__)
 
-app.register_blueprint(app_routes)
+
+@app.route('/')
+def home():
+    return render_template('0-index.html')
 
 
 if __name__ == "__main__":
     """run app"""
-    app.run(host="0.0.0.0", port="5000")
+    app.run(host="0.0.0.0", port="5000", debug=True)
